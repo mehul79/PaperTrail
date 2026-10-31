@@ -1,0 +1,9 @@
+# Phase 1: render, transcribe, extract into SQLite
+anthropic
+pymupdf
+pillow
+pydantic
+python-dotenv
+
+# Dev
+pytest
