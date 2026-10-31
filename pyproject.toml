@@ -12,4 +12,5 @@ dependencies = [
     "pymupdf4llm>=2.0",
     "pytest>=9.1.1",
     "python-dotenv>=1.2.4",
+    "requests>=2.34.2",
 ]
