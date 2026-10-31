@@ -4,9 +4,9 @@ Usage: python scripts/download_papers.py
 """
 import re
 import time
-import urllib.parse
-import urllib.request
 from pathlib import Path
+
+import requests
 
 SUBJECTS = ["UCS310", "UCS802", "UCS745", "UCS701", "UCS619", "UCS520", "UCS510", "UTA018"]  # add subject codes here
 
@@ -20,14 +20,14 @@ LINK = re.compile(r'href="(download\.php\?id=[^"]+)"')
 
 
 def fetch(url, data=None):
-    req = urllib.request.Request(url, data=data, headers={"User-Agent": "PaperTrail/0.1"})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return r.read()
+    r = requests.request("POST" if data else "GET", url, data=data,
+                         headers={"User-Agent": "PaperTrail/0.1"}, timeout=60)
+    r.raise_for_status()
+    return r.content
 
 
 def list_papers(code):
-    body = urllib.parse.urlencode({"ccode": code}).encode()
-    html = fetch(BASE + "view1.php", body).decode("utf-8", "replace")
+    html = fetch(BASE + "view1.php", {"ccode": code}).decode("utf-8", "replace")
     papers = []
     for row in ROW.findall(html):
         link = LINK.search(row)
